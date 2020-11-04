@@ -19,8 +19,9 @@ public class Calculator extends AppCompatActivity {
         setContentView(R.layout.calculator);
     }
 
-    private void insertNum(int num) {
-        dispValue += num;
+    private void insertValue(String inputValue) {
+        dispValue += inputValue;
+        currentValue = Double.parseDouble(dispValue);
         setDisp(dispValue);
     }
 
@@ -29,44 +30,53 @@ public class Calculator extends AppCompatActivity {
         view.setText(str);
     }
 
-    public void onNum1(View view) {
-        insertNum(1);
+    public void onInvert(View v) {
+        currentValue *= -1;
+        dispValue = Double.toString(currentValue);
     }
 
-    public void onNum2(View view) {
-        insertNum(2);
-    } //changed insertNum(4) to insertNum(2)
-
-    public void onNum3(View view) {
-        insertNum(3);
-    }
-
-    public void onNum4(View view) {
-        insertNum(4);
-    }
-
-    public void onNum5(View view) {
-        insertNum(5);
-    }
-
-    public void onNum6(View view) {
-        insertNum(6);
-    }
-
-    public void onNum7(View view) {
-        insertNum(7);
-    }
-
-    public void onNum8(View view) {
-        insertNum(8);
-    } //changed insertNum(0) to insertNum(8)
-
-    public void onNum9(View view) {
-        insertNum(9);
+    public void onDecimal(View view) {
+        insertValue(".");
     }
 
     public void onNum0(View view) {
-        insertNum(0);
+        insertValue("0");
+    }
+
+    public void onNum1(View view) {
+        insertValue("1");
+    }
+
+    public void onNum2(View view) {
+        insertValue("2");
+    } //changed insertValue(4) to insertValue(2)
+
+    public void onNum3(View view) {
+        insertValue("3");
+    }
+
+    public void onNum4(View view) {
+        insertValue("4");
+    }
+
+    public void onNum5(View view) {
+        insertValue("5");
+    }
+
+    public void onNum6(View view) {
+        insertValue("6");
+    }
+
+    public void onNum7(View view) {
+        insertValue("7");
+    }
+
+    public void onNum8(View view) {
+        insertValue("8");
+    } //changed insertValue(0) to insertValue(8)
+
+    public void onNum9(View view) {
+        insertValue("9");
     }
 
     public void onAdd(View view) {
