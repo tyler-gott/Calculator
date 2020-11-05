@@ -7,10 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Calculator extends AppCompatActivity {
 
-    private String dispValue = ""; //what is displayed on the output screen
-    private String lastValue = "";
+    private String displayString = ""; //what is displayed on the output screen
     private double currentValue = 0;
-    private double tempValue = 0;
+    private double lastValue = 0;
     private String operation = "";
 
     @Override
@@ -20,19 +19,20 @@ public class Calculator extends AppCompatActivity {
     }
 
     private void insertValue(String inputValue) {
-        dispValue += inputValue;
-        currentValue = Double.parseDouble(dispValue);
-        setDisp(dispValue);
+        displayString += inputValue;
+        currentValue = Double.parseDouble(displayString);
+        setDisplay(displayString);
     }
 
-    private void setDisp(String str) {
-        TextView view = (TextView)findViewById(R.id.displayValue);
-        view.setText(str);
+    private void setDisplay(String displayString) {
+        TextView view = findViewById(R.id.displayValue);
+        view.setText(displayString);
     }
 
     public void onInvert(View v) {
         currentValue *= -1;
-        dispValue = Double.toString(currentValue);
+        displayString = Double.toString(currentValue);
+        setDisplay(displayString);
     }
 
     public void onDecimal(View view) {
@@ -80,73 +80,88 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void onAdd(View view) {
-        lastValue = dispValue;
-        dispValue = ""; //clears the current value to allow for a new input
+        lastValue = currentValue;
+        currentValue = 0;
+        displayString = ""; //clears the current value to allow for a new input
         operation = "add";
     }
 
     public void onSubtract(View view) {
-        lastValue = dispValue;
-        dispValue = ""; //clears the current value to allow for a new input
+        lastValue = currentValue;
+        currentValue = 0;
+        displayString = ""; //clears the current value to allow for a new input
         operation = "subtract";
     }
 
     public void onMultiply(View view) {
-        lastValue = dispValue;
-        dispValue = ""; //clears the current value to allow for a new input
+        lastValue = currentValue;
+        currentValue = 0;
+        displayString = ""; //clears the current value to allow for a new input
         operation = "multiply";
     }
 
     public void onDivide(View view) {
-        lastValue = dispValue;
-        dispValue = ""; //clears the current value to allow for a new input
+        lastValue = currentValue;
+        currentValue = 0;
+        displayString = ""; //clears the current value to allow for a new input
         operation = "divide";
     }
 
     public void onPercent(View view) {
-        lastValue = dispValue;
+        currentValue *= 0.01;
+        displayString = Double.toString(currentValue);
+        setDisplay(displayString);
+
 
     }
 
     public void onEquals(View view) {
-        if(lastValue.length() > 0 && dispValue.length() > 0) {
-            int val1 = Integer.parseInt(lastValue);
-            int val2 = Integer.parseInt(dispValue);
-
-            int newValue = 0;
-            switch (operation) {
-                case "add":
-                    newValue = val1 + val2;
-                    setDisp(Integer.toString(newValue));
-                    break;
-                case "subtract":
-                    newValue = val1 - val2; //changed '+' to '-'
-                    setDisp(Integer.toString(newValue));
-                    break;
-                case "multiply":
-                    newValue = val1 * val2; //changed '/' to '*'
-                    setDisp(Integer.toString(newValue));
-                    break;
-                case "divide": //changed from "divider" to "divide"
-                    if (val2 == 0) {
-                        setDisp("Error: Div by 0");; //moved setDisplay to each case to prevent division by 0
-                    }
-                    else {
-                        newValue = val1 / val2;
-                        setDisp(Integer.toString(newValue));
-                    }
-                    break;
+        double outValue;
+        switch (operation) {
+            case "add":
+                outValue = lastValue + currentValue;
+                currentValue = outValue;
+                outFormat(outValue);
+                break;
+            case "subtract":
+                outValue = lastValue - currentValue;
+                currentValue = outValue;
+                outFormat(outValue);
+                break;
+            case "multiply":
+                outValue = lastValue * currentValue;
+                currentValue = outValue;
+                outFormat(outValue);
+                break;
+            case "divide":
+                if (currentValue == 0) {
+                    setDisplay("Error: Div by 0"); //moved setDisplay to each case to prevent division by 0
+                }
+                else {
+                    outValue = lastValue / currentValue;
+                    currentValue = outValue;
+                    outFormat(outValue);
+                }
+                break;
             }
-            //clears last and dispValues for next input
-            lastValue = "";
-            dispValue = "";
-        }
+            displayString = ""; //clears last and displayString
     }
 
     public void onClear(View view) {
         operation = "";
-        dispValue = "";
-        lastValue = "";
-        setDisp(""); //added to clear the display when clear is pressed
+        displayString = "";
+        lastValue = 0;
+        currentValue = 0;
+        setDisplay(""); //clears the display when clear is pressed
+    }
+
+    public void outFormat(double outValue) {
+        if (Math.floor(outValue)==outValue) {
+            int outInt = (int) outValue;
+            displayString = Integer.toString(outInt);
+        } else {
+            displayString = String.format("%.7s", outValue);
+        }
+        setDisplay(displayString);
     }
 }
