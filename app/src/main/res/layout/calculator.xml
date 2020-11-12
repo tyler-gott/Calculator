@@ -71,7 +71,7 @@
             android:backgroundTint="@color/button_light_gray"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical|center_horizontal"
-            android:onClick="onInvert"
+            android:onClick="onNegation"
             android:text="+/-"
             android:textColor="@color/black"
             android:textSize="30sp"

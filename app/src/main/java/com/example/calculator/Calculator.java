@@ -18,27 +18,7 @@ public class Calculator extends AppCompatActivity {
         setContentView(R.layout.calculator);
     }
 
-    private void insertValue(String inputValue) {
-        displayString += inputValue;
-        currentValue = Double.parseDouble(displayString);
-        setDisplay(displayString);
-    }
-
-    private void setDisplay(String displayString) {
-        TextView view = findViewById(R.id.displayValue);
-        view.setText(displayString);
-    }
-
-    public void onInvert(View v) {
-        currentValue *= -1;
-        displayString = Double.toString(currentValue);
-        setDisplay(displayString);
-    }
-
-    public void onDecimal(View view) {
-        insertValue(".");
-    }
-
+    //when their respective button is pressed, it inputs that value into the insertValue method
     public void onNum0(View view) {
         insertValue("0");
     }
@@ -49,7 +29,7 @@ public class Calculator extends AppCompatActivity {
 
     public void onNum2(View view) {
         insertValue("2");
-    } //changed insertValue(4) to insertValue(2)
+    }
 
     public void onNum3(View view) {
         insertValue("3");
@@ -73,12 +53,26 @@ public class Calculator extends AppCompatActivity {
 
     public void onNum8(View view) {
         insertValue("8");
-    } //changed insertValue(0) to insertValue(8)
+    }
 
     public void onNum9(View view) {
         insertValue("9");
     }
 
+    //concatenates the display string with the inputted value
+    private void insertValue(String inputValue) {
+        displayString += inputValue;
+        currentValue = Double.parseDouble(displayString); //updates the current value to be that of the displayed value
+        setDisplay(displayString);
+    }
+
+    //outputs the new number as a string
+    private void setDisplay(String displayString) {
+        TextView view = findViewById(R.id.displayValue);
+        view.setText(displayString);
+    }
+
+    //changes the operation to add and stores the last pressed value as lastValue
     public void onAdd(View view) {
         lastValue = currentValue;
         currentValue = 0;
@@ -86,6 +80,7 @@ public class Calculator extends AppCompatActivity {
         operation = "add";
     }
 
+    //changes the operation to subtract and stores the last pressed value as lastValue
     public void onSubtract(View view) {
         lastValue = currentValue;
         currentValue = 0;
@@ -93,6 +88,7 @@ public class Calculator extends AppCompatActivity {
         operation = "subtract";
     }
 
+    //changes the operation to multiply and stores the last pressed value as lastValue
     public void onMultiply(View view) {
         lastValue = currentValue;
         currentValue = 0;
@@ -100,6 +96,7 @@ public class Calculator extends AppCompatActivity {
         operation = "multiply";
     }
 
+    //changes the operation to divide and stores the last pressed value as lastValue
     public void onDivide(View view) {
         lastValue = currentValue;
         currentValue = 0;
@@ -107,16 +104,29 @@ public class Calculator extends AppCompatActivity {
         operation = "divide";
     }
 
+    //converts a decimal to a percent
     public void onPercent(View view) {
         currentValue *= 0.01;
-        displayString = Double.toString(currentValue);
-        setDisplay(displayString);
+        outFormat(currentValue);
+    }
 
+    //converts a positive to negative and vice versa
+    public void onNegation(View v) {
+        currentValue *= -1;
+        outFormat(currentValue);
+    }
 
+    //inserts a decimal into a number
+    public void onDecimal(View view) {
+        if (displayString.equals("")) {
+            insertValue("0.");
+        } else {
+            insertValue(".");
+        }
     }
 
     public void onEquals(View view) {
-        double outValue;
+        double outValue; //will be the number displayed post operation
         switch (operation) {
             case "add":
                 outValue = lastValue + currentValue;
@@ -135,7 +145,7 @@ public class Calculator extends AppCompatActivity {
                 break;
             case "divide":
                 if (currentValue == 0) {
-                    setDisplay("Error: Div by 0"); //moved setDisplay to each case to prevent division by 0
+                    setDisplay("Error: Div by 0");
                 }
                 else {
                     outValue = lastValue / currentValue;
@@ -144,17 +154,19 @@ public class Calculator extends AppCompatActivity {
                 }
                 break;
             }
-            displayString = ""; //clears last and displayString
+            displayString = "";
     }
 
+    //clears all stored numbers and operations
     public void onClear(View view) {
         operation = "";
         displayString = "";
         lastValue = 0;
         currentValue = 0;
-        setDisplay(""); //clears the display when clear is pressed
+        setDisplay("");
     }
 
+    //visually displays the number as an integer if it is a whole number, removing unnecessary decimals
     public void outFormat(double outValue) {
         if (Math.floor(outValue)==outValue) {
             int outInt = (int) outValue;
